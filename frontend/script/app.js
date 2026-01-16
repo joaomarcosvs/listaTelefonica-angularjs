@@ -6,11 +6,14 @@
     angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope) {
         $scope.app = "Lista Telefônica";
 
+        $scope.criterioDeOrdenacao = null;
+        $scope.direcaoOrdenacao = false;
+
         $scope.operadoras = [
-            { nome: "Oi", codigo: 14, categoria: "Celular", logo: "lib/images/oi.png" },
-            { nome: "Vivo", codigo: 15, categoria: "Celular", logo: "lib/images/vivo.png" },
-            { nome: "Tim", codigo: 41, categoria: "Celular", logo: "lib/images/tim.png" },
-            { nome: "Claro", codigo: 21, categoria: "Celular", logo: "lib/images/claro.png" }
+            { nome: "Oi", codigo: 14, categoria: "Celular", logo: "lib/images/oi.png", preco: 3 },
+            { nome: "Vivo", codigo: 15, categoria: "Celular", logo: "lib/images/vivo.png", preco: 2 },
+            { nome: "Tim", codigo: 41, categoria: "Celular", logo: "lib/images/tim.png", preco: 1 },
+            { nome: "Claro", codigo: 21, categoria: "Celular", logo: "lib/images/claro.png", preco: 2 }
         ];
 
         $scope.contatos = [
@@ -50,6 +53,11 @@
                 return contato.selecionado;
             });
         };
+
+        $scope.ordenarPor = function (campo) {
+            $scope.criterioDeOrdenacao = campo;
+            $scope.direcaoOrdenacao = !$scope.direcaoOrdenacao;
+        }
     });
 
     angular.module("listaTelefonica").directive("telefoneMask", function () {

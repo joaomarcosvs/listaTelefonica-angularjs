@@ -49,3 +49,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+th a {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
