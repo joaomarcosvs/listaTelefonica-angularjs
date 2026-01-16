@@ -1,0 +1,46 @@
+.jumbotron {
+    width: 700px;
+    text-align: center;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.form-control {
+    margin-bottom: 5px;
+}
+
+.table > tbody > tr.selecionado > td {
+    background-color: rgb(255, 210, 164) !important;
+}
+
+
+.logo-col {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.div-img {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-img {
+    width: 30px;
+    height: 30px;
+}
+
+.nome-col {
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
