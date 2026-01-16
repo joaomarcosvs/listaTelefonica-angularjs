@@ -10,6 +10,11 @@
     margin-top: 20px;
 }
 
+.table-wrapper {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
 .form-control {
     margin-bottom: 5px;
 }
