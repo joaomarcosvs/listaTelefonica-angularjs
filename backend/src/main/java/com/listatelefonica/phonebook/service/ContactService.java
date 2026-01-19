@@ -1,8 +1,10 @@
 package com.listatelefonica.phonebook.service;
 
 import com.listatelefonica.phonebook.entities.Contact;
+import com.listatelefonica.phonebook.entities.Operator;
 import com.listatelefonica.phonebook.repository.ContactRepository;
 import com.listatelefonica.phonebook.resources.dto.ContactResponse;
+import com.listatelefonica.phonebook.resources.dto.OperatorResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +37,24 @@ public class ContactService {
     }
 
     private static ContactResponse toResponse(Contact contact) {
-        return new ContactResponse(contact.getId(), contact.getName(), contact.getPhoneNumber(), contact.getEmail());
+        OperatorResponse operator = toOperatorResponse(contact.getOperator());
+        return new ContactResponse(
+            contact.getId(),
+            contact.getName(),
+            contact.getPhoneNumber(),
+            contact.getEmail(),
+            operator
+        );
+    }
+
+    private static OperatorResponse toOperatorResponse(Operator operator) {
+        return new OperatorResponse(
+            operator.getId(),
+            operator.getName(),
+            operator.getCode(),
+            operator.getCategory(),
+            operator.getLogo(),
+            operator.getPrice()
+        );
     }
 }

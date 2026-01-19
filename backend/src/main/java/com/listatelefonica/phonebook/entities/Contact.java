@@ -1,11 +1,14 @@
 package com.listatelefonica.phonebook.entities;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "tb_contacts")
-public class Contact {
+public class Contact implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,14 +23,19 @@ public class Contact {
     @Column(nullable = false)
     private String email;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "operator_id", nullable = false)
+    private Operator operator;
+
     protected Contact() {
         // For JPA
     }
 
-    public Contact(String name, String phoneNumber, String email) {
+    public Contact(String name, String phoneNumber, String email, Operator operator) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.operator = operator;
     }
 
     public Long getId() {
@@ -46,6 +54,10 @@ public class Contact {
         return email;
     }
 
+    public Operator getOperator() {
+        return operator;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -56,6 +68,10 @@ public class Contact {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setOperator(Operator operator) {
+        this.operator = operator;
     }
 
     @Override
