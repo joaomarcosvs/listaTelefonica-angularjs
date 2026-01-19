@@ -3,36 +3,61 @@
 
     angular.module("listaTelefonica", ["ngMessages"]);
 
-    angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope) {
+    angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope, $http) {
         $scope.app = "Lista Telefônica";
 
         $scope.criterioDeOrdenacao = null;
         $scope.direcaoOrdenacao = false;
 
-        $scope.operadoras = [
-            { nome: "Oi", codigo: 14, categoria: "Celular", logo: "lib/images/oi.png", preco: 3 },
-            { nome: "Vivo", codigo: 15, categoria: "Celular", logo: "lib/images/vivo.png", preco: 2 },
-            { nome: "Tim", codigo: 41, categoria: "Celular", logo: "lib/images/tim.png", preco: 1 },
-            { nome: "Claro", codigo: 21, categoria: "Celular", logo: "lib/images/claro.png", preco: 2 }
-        ];
+        $scope.operadoras = [];
+        $scope.contatos = [];
 
-        $scope.contatos = [
-            { nome: "Alanna", telefone: "5199864235", data: new Date(2025, 0, 12), operadora: $scope.operadoras[0] },
-            { nome: "Joao M", telefone: "5199995555", data: new Date(2024, 10, 28), operadora: $scope.operadoras[3] },
-            { nome: "Bia", telefone: "5199993333", data: new Date(2025, 5, 3), operadora: $scope.operadoras[1] },
-            { nome: "Eduardo", telefone: "5199994444", data: new Date(2024, 7, 19), operadora: $scope.operadoras[2] },
-            { nome: "Carla", telefone: "5199811111", data: new Date(2025, 2, 7), operadora: $scope.operadoras[0] },
-            { nome: "Diego", telefone: "5199822222", data: new Date(2024, 11, 15), operadora: $scope.operadoras[1] },
-            { nome: "Fernanda", telefone: "5199833333", data: new Date(2025, 3, 22), operadora: $scope.operadoras[2] },
-            { nome: "Gabriel", telefone: "5199844444", data: new Date(2025, 6, 9), operadora: $scope.operadoras[3] },
-            { nome: "Helena", telefone: "5199855555", data: new Date(2024, 9, 30), operadora: $scope.operadoras[1] },
-            { nome: "Igor", telefone: "5199866666", data: new Date(2025, 4, 18), operadora: $scope.operadoras[0] },
-            { nome: "Julia", telefone: "5199877777", data: new Date(2024, 6, 12), operadora: $scope.operadoras[2] },
-            { nome: "Lucas", telefone: "5199888888", data: new Date(2025, 1, 25), operadora: $scope.operadoras[3] },
-            { nome: "Marina", telefone: "5199899999", data: new Date(2024, 8, 5), operadora: $scope.operadoras[0] },
-            { nome: "Nicolas", telefone: "5199800000", data: new Date(2025, 7, 14), operadora: $scope.operadoras[1] },
-            { nome: "Olivia", telefone: "5199812121", data: new Date(2024, 4, 27), operadora: $scope.operadoras[2] }
-        ];
+        var bytesToBase64 = function (bytes) {
+            var binary = "";
+            var chunkSize = 0x8000;
+            for (var i = 0; i < bytes.length; i += chunkSize) {
+                var chunk = bytes.slice(i, i + chunkSize);
+                binary += String.fromCharCode.apply(null, chunk);
+            }
+            return btoa(binary);
+        };
+
+        var toLogoUrl = function (operator) {
+            if (!operator || !operator.logo || operator.logo.length === 0) {
+                return null;
+            }
+
+            if (Array.isArray(operator.logo)) {
+                return "data:image/png;base64," + bytesToBase64(operator.logo);
+            }
+
+            if (operator.logo.indexOf("data:image") === 0) {
+                return operator.logo;
+            }
+
+            return "data:image/png;base64," + operator.logo;
+        };
+
+        var carregaContatos = function () {
+            $http.get("http://localhost:8080/api/contacts").then(function (response) {
+                $scope.contatos = response.data.map(function (contato) {
+                    if (contato.operator) {
+                        contato.operator.logoUrl = toLogoUrl(contato.operator);
+                    }
+                    contato.data = contato.data || null;
+                    return contato;
+                });
+            });
+        };
+
+        var carregaOperadoras = function () {
+            $http.get("http://localhost:8080/api/operators").then(function (response) {
+                $scope.operadoras = response.data.map(function (operadora) {
+                    operadora.logoUrl = toLogoUrl(operadora);
+                    return operadora;
+                });
+            });
+        };
 
         $scope.adicionarContato = function (contato) {
             var novoContato = angular.copy(contato);
@@ -58,6 +83,10 @@
             $scope.criterioDeOrdenacao = campo;
             $scope.direcaoOrdenacao = !$scope.direcaoOrdenacao;
         }
+
+        carregaContatos();
+        carregaOperadoras();
+
     });
 
     angular.module("listaTelefonica").directive("telefoneMask", function () {

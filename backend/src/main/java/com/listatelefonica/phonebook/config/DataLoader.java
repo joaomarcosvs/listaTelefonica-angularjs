@@ -19,12 +19,12 @@ public class DataLoader {
     @Bean
     CommandLineRunner seedDatabase(ContactRepository contactRepository, OperatorRepository operatorRepository) {
         return args -> {
-            if (operatorRepository.count() == 0) {
+                if (operatorRepository.count() == 0) {
                 List<Operator> operators = List.of(
-                        new Operator("Oi", 14, "Celular", readLogo("../frontend/lib/images/oi.png"), BigDecimal.valueOf(3)),
-                        new Operator("Vivo", 15, "Celular", readLogo("../frontend/lib/images/vivo.png"), BigDecimal.valueOf(2)),
-                        new Operator("Tim", 41, "Celular", readLogo("../frontend/lib/images/tim.png"), BigDecimal.valueOf(1)),
-                        new Operator("Claro", 21, "Celular", readLogo("../frontend/lib/images/claro.png"), BigDecimal.valueOf(2))
+                    new Operator("Oi", 14, "Celular", readLogo("frontend/lib/images/oi.png"), BigDecimal.valueOf(3)),
+                    new Operator("Vivo", 15, "Celular", readLogo("frontend/lib/images/vivo.png"), BigDecimal.valueOf(2)),
+                    new Operator("Tim", 41, "Celular", readLogo("frontend/lib/images/tim.png"), BigDecimal.valueOf(1)),
+                    new Operator("Claro", 21, "Celular", readLogo("frontend/lib/images/claro.png"), BigDecimal.valueOf(2))
                 );
 
                 operatorRepository.saveAll(operators);
@@ -47,10 +47,24 @@ public class DataLoader {
     }
 
     private static byte[] readLogo(String relativePath) {
-        try {
-            return Files.readAllBytes(Path.of(relativePath));
-        } catch (IOException ex) {
-            return new byte[0];
+        String userDir = System.getProperty("user.dir");
+        List<Path> candidates = List.of(
+                Path.of(userDir, relativePath),
+                Path.of(userDir, "backend", relativePath),
+                Path.of(userDir, "..", relativePath),
+                Path.of(relativePath)
+        );
+
+        for (Path path : candidates) {
+            if (Files.exists(path)) {
+                try {
+                    return Files.readAllBytes(path);
+                } catch (IOException ex) {
+                    return new byte[0];
+                }
+            }
         }
+
+        return new byte[0];
     }
 }
