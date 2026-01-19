@@ -48,11 +48,22 @@
         };
 
         $scope.adicionarContato = function (contato) {
-            var novoContato = angular.copy(contato);
-            novoContato.data = new Date();
-            $scope.contatos.push(novoContato);
-            delete $scope.contato;
-            $scope.contatoForm.$setPristine();
+            var payload = {
+                name: contato.name,
+                phoneNumber: contato.phoneNumber,
+                email: contato.email,
+                operatorId: contato.operator && contato.operator.id ? contato.operator.id : null
+            };
+
+            $http.post(backendBaseUrl + "/api/contacts", payload).then(function (response) {
+                var saved = response.data;
+                if (saved.operator) {
+                    saved.operator.logoUrl = toLogoUrl(saved.operator);
+                }
+                $scope.contatos.push(saved);
+                delete $scope.contato;
+                $scope.contatoForm.$setPristine();
+            });
         };
 
         $scope.apagarContatos = function (contatos) {
