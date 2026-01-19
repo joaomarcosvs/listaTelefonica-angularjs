@@ -12,34 +12,22 @@
         $scope.operadoras = [];
         $scope.contatos = [];
 
-        var bytesToBase64 = function (bytes) {
-            var binary = "";
-            var chunkSize = 0x8000;
-            for (var i = 0; i < bytes.length; i += chunkSize) {
-                var chunk = bytes.slice(i, i + chunkSize);
-                binary += String.fromCharCode.apply(null, chunk);
-            }
-            return btoa(binary);
-        };
+        var backendBaseUrl = "http://localhost:8080";
 
         var toLogoUrl = function (operator) {
-            if (!operator || !operator.logo || operator.logo.length === 0) {
+            if (!operator || !operator.logoUrl) {
                 return null;
             }
 
-            if (Array.isArray(operator.logo)) {
-                return "data:image/png;base64," + bytesToBase64(operator.logo);
+            if (operator.logoUrl.indexOf("http") === 0) {
+                return operator.logoUrl;
             }
 
-            if (operator.logo.indexOf("data:image") === 0) {
-                return operator.logo;
-            }
-
-            return "data:image/png;base64," + operator.logo;
+            return backendBaseUrl + operator.logoUrl;
         };
 
         var carregaContatos = function () {
-            $http.get("http://localhost:8080/api/contacts").then(function (response) {
+            $http.get(backendBaseUrl + "/api/contacts").then(function (response) {
                 $scope.contatos = response.data.map(function (contato) {
                     if (contato.operator) {
                         contato.operator.logoUrl = toLogoUrl(contato.operator);
@@ -51,7 +39,7 @@
         };
 
         var carregaOperadoras = function () {
-            $http.get("http://localhost:8080/api/operators").then(function (response) {
+            $http.get(backendBaseUrl + "/api/operators").then(function (response) {
                 $scope.operadoras = response.data.map(function (operadora) {
                     operadora.logoUrl = toLogoUrl(operadora);
                     return operadora;

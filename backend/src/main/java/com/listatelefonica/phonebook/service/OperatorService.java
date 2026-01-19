@@ -38,8 +38,8 @@ public class OperatorService {
             operator.getName(),
             operator.getCode(),
             operator.getCategory(),
-            operator.getLogo(),
-            operator.getPrice()
+            operator.getPrice(),
+            "/api/operators/" + operator.getId() + "/logo"
         );
     }
 }
