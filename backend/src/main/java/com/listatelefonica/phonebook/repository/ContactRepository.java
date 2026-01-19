@@ -1,0 +1,8 @@
+package com.listatelefonica.phonebook.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.listatelefonica.phonebook.entities.Contact;
+
+public interface ContactRepository extends JpaRepository<Contact, Long> {
+}

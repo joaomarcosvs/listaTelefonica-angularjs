@@ -1,0 +1,28 @@
+# Maven / Java
+/target/
+/.mvn/wrapper/maven-wrapper.jar
+/.mvn/timing.properties
+/*.log
+/hs_err_pid*
+/replay_pid*
+
+# Spring Boot
+/.spring-boot-devtools.properties
+
+# Test/coverage
+/coverage/
+/target/site/
+
+# IDEs
+/.idea/
+/*.iml
+/.vscode/
+/*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env files
+/.env
+/.env.*
