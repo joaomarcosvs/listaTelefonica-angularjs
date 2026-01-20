@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista Telefônica</title>
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" href="style/styles.css">
 </head>
 
@@ -21,6 +22,7 @@
                     <th><a href="" ng-click="ordenarPor('phoneNumber')">Telefone</a></th>
                     <th><a href="" ng-click="ordenarPor('operator.name')">Operadora</a></th>
                     <th>Logo Op.</th>
+                    <th>Editar</th>
                 </tr>
                 <tr ng-class="{'selecionado': contato.selecionado}" ng-repeat="contato in contatos | filter: criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoOrdenacao">
                     <td><input type="checkbox" ng-model="contato.selecionado" /></td>
@@ -31,6 +33,11 @@
                         <div class="div-img">
                             <img class="logo-img" ng-src="{{contato.operator.logoUrl}}" alt="Logo da operadora">
                         </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-default" type="button" ng-click="editarContato(contato)">
+                            <span class="material-icons" aria-hidden="true">edit</span>
+                        </button>
                     </td>
                 </tr>
             </table>
@@ -64,7 +71,9 @@
             <div ng-message="required">Por favor, selecione uma operadora!</div>
         </div>
 
-        <button class="btn btn-primary form-control" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar a lista!</button>
+        <button class="btn btn-primary form-control" ng-click="salvarContato(contato)" ng-disabled="contatoForm.$invalid">
+            {{contato && contato.id ? 'Atualizar contato' : 'Adicionar a lista!'}}
+        </button>
         <button class="btn btn-danger form-control" ng-click="apagarContatos(contatos)" ng-show="isContatoSelecionado(contatos)">Apagar contatos!</button>
     </div>
 

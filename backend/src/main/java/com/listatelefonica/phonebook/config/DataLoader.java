@@ -43,7 +43,56 @@ public class DataLoader {
                     contactRepository.saveAll(contacts);
                 }
             }
+
+            List<Contact> contacts = contactRepository.findAll();
+            boolean updated = false;
+            for (Contact contact : contacts) {
+                String normalized = normalizePhoneNumber(contact.getPhoneNumber());
+                if (normalized != null && !normalized.equals(contact.getPhoneNumber())) {
+                    contact.setPhoneNumber(normalized);
+                    updated = true;
+                }
+            }
+
+            if (updated) {
+                contactRepository.saveAll(contacts);
+            }
         };
+    }
+
+    private static String normalizePhoneNumber(String value) {
+        if (value == null || value.isBlank()) {
+            return value;
+        }
+
+        String digits = value.replaceAll("\\D", "");
+        if (digits.startsWith("55") && digits.length() > 11) {
+            digits = digits.substring(2);
+        }
+
+        if (digits.length() > 11) {
+            digits = digits.substring(0, 11);
+        }
+
+        if (digits.length() < 10) {
+            return value;
+        }
+
+        String ddd = digits.substring(0, 2);
+        String local = digits.substring(2);
+
+        String prefix;
+        String suffix;
+
+        if (local.length() == 9) {
+            prefix = local.substring(0, 5);
+            suffix = local.substring(5);
+        } else {
+            prefix = local.substring(0, 4);
+            suffix = local.substring(4);
+        }
+
+        return "+55 " + ddd + " " + prefix + "-" + suffix;
     }
 
     private static byte[] readLogo(String relativePath) {

@@ -48,9 +48,69 @@ public class ContactService {
         Operator operator = operatorRepository.findById(request.operatorId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operadora não encontrada"));
 
-        Contact contact = new Contact(request.name(), request.phoneNumber(), request.email(), operator);
+        String phoneNumber = normalizePhoneNumber(request.phoneNumber());
+        Contact contact = new Contact(request.name(), phoneNumber, request.email(), operator);
         Contact saved = contactRepository.save(contact);
         return toResponse(saved);
+    }
+
+    @Transactional
+    public ContactResponse update(Long id, ContactRequest request) {
+        Contact contact = contactRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contato não encontrado"));
+
+        Operator operator = operatorRepository.findById(request.operatorId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operadora não encontrada"));
+
+        contact.setName(request.name());
+        contact.setPhoneNumber(normalizePhoneNumber(request.phoneNumber()));
+        contact.setEmail(request.email());
+        contact.setOperator(operator);
+
+        Contact saved = contactRepository.save(contact);
+        return toResponse(saved);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Contact contact = contactRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contato não encontrado"));
+        contactRepository.delete(contact);
+    }
+
+    private static String normalizePhoneNumber(String value) {
+        if (value == null || value.isBlank()) {
+            return value;
+        }
+
+        String digits = value.replaceAll("\\D", "");
+        if (digits.startsWith("55") && digits.length() > 11) {
+            digits = digits.substring(2);
+        }
+
+        if (digits.length() > 11) {
+            digits = digits.substring(0, 11);
+        }
+
+        if (digits.length() < 10) {
+            return value;
+        }
+
+        String ddd = digits.substring(0, 2);
+        String local = digits.substring(2);
+
+        String prefix;
+        String suffix;
+
+        if (local.length() == 9) {
+            prefix = local.substring(0, 5);
+            suffix = local.substring(5);
+        } else {
+            prefix = local.substring(0, 4);
+            suffix = local.substring(4);
+        }
+
+        return "+55 " + ddd + " " + prefix + "-" + suffix;
     }
 
     private static ContactResponse toResponse(Contact contact) {
