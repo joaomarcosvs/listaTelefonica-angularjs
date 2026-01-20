@@ -43,6 +43,13 @@ public class ContactService {
         return obj.get();
     }
 
+    @Transactional(readOnly = true)
+    public ContactResponse findResponseById(Long id) {
+        Contact contact = contactRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contato não encontrado"));
+        return toResponse(contact);
+    }
+
     @Transactional
     public ContactResponse create(ContactRequest request) {
         Operator operator = operatorRepository.findById(request.operatorId())

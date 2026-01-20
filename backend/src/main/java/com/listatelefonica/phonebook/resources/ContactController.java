@@ -37,8 +37,8 @@ public class ContactController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Contact> findById(@PathVariable Long id){
-        Contact obj = contactService.findById(id);
+    public ResponseEntity<ContactResponse> findById(@PathVariable Long id){
+        ContactResponse obj = contactService.findResponseById(id);
         return ResponseEntity.ok().body(obj);
     }
 
