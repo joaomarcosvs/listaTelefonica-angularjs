@@ -167,7 +167,7 @@
 
           var digits = value.toString().replace(/\D/g, "");
 
-          if (digits.indexOf("55") === 0 && digits.length > 11) {
+          if (digits.indexOf("55") === 0) {
             digits = digits.slice(2);
           }
 
