@@ -1,12 +1,10 @@
 package com.listatelefonica.phonebook.resources;
 
-import com.listatelefonica.phonebook.entities.Contact;
 import com.listatelefonica.phonebook.resources.dto.ContactRequest;
 import com.listatelefonica.phonebook.resources.dto.ContactResponse;
 import com.listatelefonica.phonebook.service.ContactService;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +24,6 @@ public class ContactController {
 
     private final ContactService contactService;
 
-    @Autowired
     public ContactController(ContactService contactService) {
         this.contactService = contactService;
     }
