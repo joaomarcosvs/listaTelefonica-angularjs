@@ -8,6 +8,13 @@
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" href="style/styles.css">
+
+    <script src="lib/angular/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-messages.min.js"></script>
+    <script src="script/app.js"></script>
+    <script src="script/services/contatosAPIService.js"></script>
+    <script src="script/services/operadorasAPIService.js"></script>
+    <script src="script/controller/listaTelefonicaCtrl.js"></script>
 </head>
 
 <body ng-controller="listaTelefonicaCtrl">
@@ -77,11 +84,6 @@
         <button class="btn btn-danger form-control" ng-click="apagarContatos(contatos)" ng-show="isContatoSelecionado(contatos)">Apagar contatos!</button>
     </div>
 
-    <script src="lib/angular/angular.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-messages.min.js"></script>
-    <script src="script/app.js"></script>
-    <script src="script/services/contatosAPIService.js"></script>
-    <script src="script/controller/listaTelefonicaCtrl.js"></script>
 </body>
 
 </html>

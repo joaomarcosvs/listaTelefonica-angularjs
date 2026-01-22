@@ -3,7 +3,7 @@
 
   angular
     .module("listaTelefonica")
-    .controller("listaTelefonicaCtrl", function ($scope, $q, contatosAPI) {
+    .controller("listaTelefonicaCtrl", function ($scope, $q, contatosAPI, operadorasAPI) {
       $scope.app = "Lista Telefônica";
 
       $scope.criterioDeOrdenacao = null;
@@ -37,7 +37,7 @@
       };
 
       var carregaOperadoras = function () {
-        contatosAPI.getOperadoras().then(function (response) {
+        operadorasAPI.getOperadoras().then(function (response) {
           $scope.operadoras = response.data.map(function (operadora) {
             operadora.logoUrl = toLogoUrl(operadora);
             return operadora;

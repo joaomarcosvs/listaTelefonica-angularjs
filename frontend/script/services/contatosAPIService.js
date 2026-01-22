@@ -17,16 +17,11 @@ angular.module("listaTelefonica").factory("contatosAPI", function ($http) {
         return $http.delete(backendBaseUrl + "/api/contacts/" + id);
     };
 
-    var _getOperadoras = function () {
-        return $http.get(backendBaseUrl + "/api/operators");
-    };
 
     return {
         getContatos: _getContatos,
         createContato: _createContato,
         updateContato: _updateContato,
         deleteContato: _deleteContato,
-        getOperadoras: _getOperadoras,
-        backendBaseUrl: backendBaseUrl
     };
 });
