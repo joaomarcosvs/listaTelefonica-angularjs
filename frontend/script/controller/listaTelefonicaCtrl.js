@@ -12,23 +12,11 @@
       $scope.operadoras = [];
       $scope.contatos = [];
 
-      var toLogoUrl = function (operator) {
-        if (!operator || !operator.logoUrl) {
-          return null;
-        }
-
-        if (operator.logoUrl.indexOf("http") === 0) {
-          return operator.logoUrl;
-        }
-
-        return contatosAPI.backendBaseUrl + operator.logoUrl;
-      };
-
       var carregaContatos = function () {
         contatosAPI.getContatos().then(function (response) {
           $scope.contatos = response.data.map(function (contato) {
             if (contato.operator) {
-              contato.operator.logoUrl = toLogoUrl(contato.operator);
+              contato.operator.logoUrl = operadorasAPI.toLogoUrl(contato.operator);
             }
             contato.data = contato.data || null;
             return contato;
@@ -39,7 +27,7 @@
       var carregaOperadoras = function () {
         operadorasAPI.getOperadoras().then(function (response) {
           $scope.operadoras = response.data.map(function (operadora) {
-            operadora.logoUrl = toLogoUrl(operadora);
+            operadora.logoUrl = operadorasAPI.toLogoUrl(operadora);
             return operadora;
           });
 
@@ -75,7 +63,7 @@
             .then(function (response) {
               var updated = response.data;
               if (updated.operator) {
-                updated.operator.logoUrl = toLogoUrl(updated.operator);
+                updated.operator.logoUrl = operadorasAPI.toLogoUrl(updated.operator);
               }
 
               var index = $scope.contatos.findIndex(function (item) {
@@ -97,7 +85,7 @@
           .then(function (response) {
             var saved = response.data;
             if (saved.operator) {
-              saved.operator.logoUrl = toLogoUrl(saved.operator);
+              saved.operator.logoUrl = operadorasAPI.toLogoUrl(saved.operator);
             }
             $scope.contatos.push(saved);
             delete $scope.contato;
