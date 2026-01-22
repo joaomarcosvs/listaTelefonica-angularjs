@@ -11,35 +11,57 @@
 
       $scope.operadoras = [];
       $scope.contatos = [];
+      $scope.error = null;
+
+      var setError = function (message) {
+        $scope.error = message || "Ocorreu um erro inesperado.";
+      };
+
+      var clearError = function () {
+        $scope.error = null;
+      };
 
       var carregaContatos = function () {
-        contatosAPI.getContatos().then(function (response) {
-          $scope.contatos = response.data.map(function (contato) {
-            if (contato.operator) {
-              contato.operator.logoUrl = operadorasAPI.toLogoUrl(contato.operator);
-            }
-            contato.data = contato.data || null;
-            return contato;
+        contatosAPI
+          .getContatos()
+          .then(function (response) {
+            $scope.contatos = response.data.map(function (contato) {
+              if (contato.operator) {
+                contato.operator.logoUrl = operadorasAPI.toLogoUrl(contato.operator);
+              }
+              contato.data = contato.data || null;
+              return contato;
+            });
+            clearError();
+          })
+          .catch(function () {
+            setError("Não foi possível carregar os contatos.");
           });
-        });
       };
 
       var carregaOperadoras = function () {
-        operadorasAPI.getOperadoras().then(function (response) {
-          $scope.operadoras = response.data.map(function (operadora) {
-            operadora.logoUrl = operadorasAPI.toLogoUrl(operadora);
-            return operadora;
-          });
-
-          if ($scope.contato && $scope.contato.operator) {
-            var atual = $scope.operadoras.find(function (operadora) {
-              return operadora.id === $scope.contato.operator.id;
+        operadorasAPI
+          .getOperadoras()
+          .then(function (response) {
+            $scope.operadoras = response.data.map(function (operadora) {
+              operadora.logoUrl = operadorasAPI.toLogoUrl(operadora);
+              return operadora;
             });
-            if (atual) {
-              $scope.contato.operator = atual;
+
+            if ($scope.contato && $scope.contato.operator) {
+              var atual = $scope.operadoras.find(function (operadora) {
+                return operadora.id === $scope.contato.operator.id;
+              });
+              if (atual) {
+                $scope.contato.operator = atual;
+              }
             }
-          }
-        });
+
+            clearError();
+          })
+          .catch(function () {
+            setError("Não foi possível carregar as operadoras.");
+          });
       };
 
       // Atualiza ou cria o contato
@@ -80,6 +102,10 @@
 
             delete $scope.contato;
             $scope.contatoForm.$setPristine();
+            clearError();
+          })
+          .catch(function () {
+            setError("Não foi possível atualizar o contato.");
           });
       };
 
@@ -100,6 +126,10 @@
             $scope.contatos.push(saved);
             delete $scope.contato;
             $scope.contatoForm.$setPristine();
+            clearError();
+          })
+          .catch(function () {
+            setError("Não foi possível criar o contato.");
           });
       };
 
@@ -129,9 +159,14 @@
           return contatosAPI.deleteContato(contato.id);
         });
 
-        $q.all(requisicoes).then(function () {
-          carregaContatos();
-        });
+        $q.all(requisicoes)
+          .then(function () {
+            carregaContatos();
+            clearError();
+          })
+          .catch(function () {
+            setError("Não foi possível apagar os contatos selecionados.");
+          });
       };
 
       $scope.isContatoSelecionado = function (contatos) {
