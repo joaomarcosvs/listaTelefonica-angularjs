@@ -1,5 +1,7 @@
 angular.module("listaTelefonica").directive("uiAlert", function() {
     return {
-        templateurl: "view/alert.html"
+        templateUrl: "script/view/alert.html",
+        replace: true,
+        restrict: "E"
     };
 });
