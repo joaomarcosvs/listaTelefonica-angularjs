@@ -42,12 +42,9 @@
         });
       };
 
-      $scope.salvarContato = function (contato) {
-        if (!contato) {
-          return;
-        }
-
-        var payload = {
+      // Atualiza ou cria o contato
+      var montarPayloadContato = function (contato) {
+        return {
           name: contato.name,
           phoneNumber: contato.phoneNumber,
           email: contato.email,
@@ -56,29 +53,42 @@
               ? contato.operator.id
               : null,
         };
+      };
 
-        if (contato.id) {
-          contatosAPI
-            .updateContato(contato.id, payload)
-            .then(function (response) {
-              var updated = response.data;
-              if (updated.operator) {
-                updated.operator.logoUrl = operadorasAPI.toLogoUrl(updated.operator);
-              }
-
-              var index = $scope.contatos.findIndex(function (item) {
-                return item.id === updated.id;
-              });
-
-              if (index >= 0) {
-                $scope.contatos[index] = updated;
-              }
-
-              delete $scope.contato;
-              $scope.contatoForm.$setPristine();
-            });
+      $scope.atualizarContato = function (contato) {
+        if (!contato || !contato.id) {
           return;
         }
+
+        var payload = montarPayloadContato(contato);
+
+        contatosAPI
+          .updateContato(contato.id, payload)
+          .then(function (response) {
+            var updated = response.data;
+            if (updated.operator) {
+              updated.operator.logoUrl = operadorasAPI.toLogoUrl(updated.operator);
+            }
+
+            var index = $scope.contatos.findIndex(function (item) {
+              return item.id === updated.id;
+            });
+
+            if (index >= 0) {
+              $scope.contatos[index] = updated;
+            }
+
+            delete $scope.contato;
+            $scope.contatoForm.$setPristine();
+          });
+      };
+
+      $scope.criarContato = function (contato) {
+        if (!contato || contato.id) {
+          return;
+        }
+
+        var payload = montarPayloadContato(contato);
 
         contatosAPI
           .createContato(payload)

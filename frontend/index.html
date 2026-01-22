@@ -79,7 +79,7 @@
             <div ng-message="required">Por favor, selecione uma operadora!</div>
         </div>
 
-        <button class="btn btn-primary form-control" ng-click="salvarContato(contato)" ng-disabled="contatoForm.$invalid">
+        <button class="btn btn-primary form-control" ng-click="contato && contato.id ? atualizarContato(contato) : criarContato(contato)" ng-disabled="contatoForm.$invalid">
             {{contato && contato.id ? 'Atualizar contato' : 'Adicionar a lista!'}}
         </button>
         <button class="btn btn-danger form-control" ng-click="apagarContatos(contatos)" ng-show="isContatoSelecionado(contatos)">Apagar contatos!</button>
