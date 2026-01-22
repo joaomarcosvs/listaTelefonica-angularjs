@@ -3,7 +3,7 @@
 
   angular
     .module("listaTelefonica")
-    .controller("listaTelefonicaCtrl", function ($scope, $http, $q) {
+    .controller("listaTelefonicaCtrl", function ($scope, $q, contatosAPI) {
       $scope.app = "Lista Telefônica";
 
       $scope.criterioDeOrdenacao = null;
@@ -11,8 +11,6 @@
 
       $scope.operadoras = [];
       $scope.contatos = [];
-
-      var backendBaseUrl = "http://localhost:8080";
 
       var toLogoUrl = function (operator) {
         if (!operator || !operator.logoUrl) {
@@ -23,11 +21,11 @@
           return operator.logoUrl;
         }
 
-        return backendBaseUrl + operator.logoUrl;
+        return contatosAPI.backendBaseUrl + operator.logoUrl;
       };
 
       var carregaContatos = function () {
-        $http.get(backendBaseUrl + "/api/contacts").then(function (response) {
+        contatosAPI.getContatos().then(function (response) {
           $scope.contatos = response.data.map(function (contato) {
             if (contato.operator) {
               contato.operator.logoUrl = toLogoUrl(contato.operator);
@@ -39,7 +37,7 @@
       };
 
       var carregaOperadoras = function () {
-        $http.get(backendBaseUrl + "/api/operators").then(function (response) {
+        contatosAPI.getOperadoras().then(function (response) {
           $scope.operadoras = response.data.map(function (operadora) {
             operadora.logoUrl = toLogoUrl(operadora);
             return operadora;
@@ -72,8 +70,8 @@
         };
 
         if (contato.id) {
-          $http
-            .put(backendBaseUrl + "/api/contacts/" + contato.id, payload)
+          contatosAPI
+            .updateContato(contato.id, payload)
             .then(function (response) {
               var updated = response.data;
               if (updated.operator) {
@@ -94,8 +92,8 @@
           return;
         }
 
-        $http
-          .post(backendBaseUrl + "/api/contacts", payload)
+        contatosAPI
+          .createContato(payload)
           .then(function (response) {
             var saved = response.data;
             if (saved.operator) {
@@ -130,7 +128,7 @@
         }
 
         var requisicoes = selecionados.map(function (contato) {
-          return $http.delete(backendBaseUrl + "/api/contacts/" + contato.id);
+          return contatosAPI.deleteContato(contato.id);
         });
 
         $q.all(requisicoes).then(function () {

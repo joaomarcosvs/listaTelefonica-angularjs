@@ -1,1 +1,32 @@
-angular.module()
+angular.module("listaTelefonica").factory("contatosAPI", function ($http) {
+    var backendBaseUrl = "http://localhost:8080";
+
+    var _getContatos = function () {
+        return $http.get(backendBaseUrl + "/api/contacts");
+    };
+
+    var _createContato = function (contato) {
+        return $http.post(backendBaseUrl + "/api/contacts", contato);
+    };
+
+    var _updateContato = function (id, contato) {
+        return $http.put(backendBaseUrl + "/api/contacts/" + id, contato);
+    };
+
+    var _deleteContato = function (id) {
+        return $http.delete(backendBaseUrl + "/api/contacts/" + id);
+    };
+
+    var _getOperadoras = function () {
+        return $http.get(backendBaseUrl + "/api/operators");
+    };
+
+    return {
+        getContatos: _getContatos,
+        createContato: _createContato,
+        updateContato: _updateContato,
+        deleteContato: _deleteContato,
+        getOperadoras: _getOperadoras,
+        backendBaseUrl: backendBaseUrl
+    };
+});
