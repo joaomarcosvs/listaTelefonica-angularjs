@@ -15,7 +15,8 @@
     <script src="script/services/contatosAPIService.js"></script>
     <script src="script/services/operadorasAPIService.js"></script>
     <script src="script/controller/listaTelefonicaCtrl.js"></script>
-    <script src="script/value/configValue.js"></script>
+    <script src="script/config/configValue.js"></script>
+    <script src="script/filters/nameFilter.js"></script>
 </head>
 
 <body ng-controller="listaTelefonicaCtrl">
@@ -34,7 +35,7 @@
                 </tr>
                 <tr ng-class="{'selecionado': contato.selecionado}" ng-repeat="contato in contatos | filter: criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoOrdenacao">
                     <td><input type="checkbox" ng-model="contato.selecionado" /></td>
-                    <td class="nome-col" title="{{contato.name}}">{{contato.name}}</td>
+                    <td class="nome-col" title="{{contato.name}}">{{contato.name | name }}</td>
                     <td>{{contato.phoneNumber}}</td>
                     <td>{{contato.operator.name}}</td>
                     <td class="logo-col">
