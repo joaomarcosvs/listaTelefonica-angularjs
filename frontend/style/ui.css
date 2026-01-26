@@ -10,7 +10,6 @@
 .ui-alert-header{
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 10px;
 }
 
@@ -18,22 +17,13 @@
     color: #b42318;
     font-weight: bold;
     font-size: 16px;
+    padding-left: 40%;
 }
 
 .ui-alert-message{
     color: #b42318;
     margin-top: 6px;
     font-size: 14px;
-}
-
-.ui-alert-close{
-    background: transparent;
-    border: none;
-    color: #7a271a;
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0 4px;
 }
 
 .ui-alert--success{

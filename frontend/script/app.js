@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  angular.module("listaTelefonica", ["ngMessages"]);
+  angular.module("listaTelefonica", ["ngMessages", "ngRoute"]);
 
   angular.module("listaTelefonica").directive("telefoneMask", function () {
     return {

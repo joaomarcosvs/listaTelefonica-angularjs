@@ -1,0 +1,77 @@
+<div class="jumbotron">
+    <h3>{{app}}</h3>
+    <ui-alert
+        ng-if="error"
+        type="error"
+        title="Ops, aconteceu um erro!"
+        message="error"
+        dismissible="true">
+    </ui-alert>
+    <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você esta buscando?">
+    <div class="table-wrapper" ng-show="contatos.length > 0">
+        <table class="table table-striped">
+            <tr>
+                <th></th>
+                <th><a href="" ng-click="ordenarPor('name')">Nome</a></th>
+                <th><a href="" ng-click="ordenarPor('phoneNumber')">Telefone</a></th>
+                <th><a href="" ng-click="ordenarPor('operator.name')">Operadora</a></th>
+                <th>Logo Op.</th>
+                <th>Editar</th>
+            </tr>
+            <tr ng-class="{'selecionado': contato.selecionado}" ng-repeat="contato in contatos | filter: criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoOrdenacao">
+                <td><input type="checkbox" ng-model="contato.selecionado" /></td>
+                <td class="nome-col" title="{{contato.name}}">{{contato.name | name }}</td>
+                <td>{{contato.phoneNumber}}</td>
+                <td>{{contato.operator.name}}</td>
+                <td class="logo-col">
+                    <div class="div-img">
+                        <img class="logo-img" ng-src="{{contato.operator.logoUrl}}" alt="Logo da operadora">
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-default" type="button" ng-click="editarContato(contato)">
+                        <span class="material-icons" aria-hidden="true">edit</span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <hr />
+    <form name="contatoForm">
+        <input class="form-control" type="text" ng-model="contato.name" name="nome" placeholder="Digite seu nome" ng-required="true" ng-minlength="3" />
+        <input class="form-control" type="text" ng-model="contato.phoneNumber" name="telefone" placeholder="(99) 99999-9999" ng-required="true" ng-minlength="10" telefone-mask />
+        <input class="form-control" type="email" ng-model="contato.email" name="email" placeholder="email@exemplo.com" ng-required="true" />
+        <input class="form-control" type="text" ng-model="contato.data" name="data" placeholder="DD/MM/AAAA" ui-date />
+        <select class="form-control" ng-model="contato.operator" name="operadora" ng-options="operadora.name + ' (' + (operadora.price | currency) + ')' for operadora in operadoras | orderBy:'name'" ng-required="true">
+            <option value="">Selecione uma operadora</option>
+        </select>
+    </form>
+
+    <div class="alert alert-danger" ng-messages="contatoForm.nome.$error" ng-if="contatoForm.nome.$dirty && contatoForm.nome.$invalid">
+        <div ng-message="required">Por favor, preencha o campo nome!</div>
+        <div ng-message="minlength">O campo nome deve ter no mínimo 3 caracteres!</div>
+    </div>
+
+    <div class="alert alert-danger" ng-messages="contatoForm.telefone.$error" ng-if="contatoForm.telefone.$dirty && contatoForm.telefone.$invalid">
+        <div ng-message="required">Por favor, preencha o campo telefone!</div>
+        <div ng-message="minlength">O telefone deve ter pelo menos 10 dígitos.</div>
+    </div>
+
+    <div class="alert alert-danger" ng-messages="contatoForm.email.$error" ng-if="contatoForm.email.$dirty && contatoForm.email.$invalid">
+        <div ng-message="required">Por favor, preencha o campo email!</div>
+        <div ng-message="email">Informe um email válido.</div>
+    </div>
+
+    <div class="alert alert-danger" ng-messages="contatoForm.data.$error" ng-if="contatoForm.data.$dirty && contatoForm.data.$invalid">
+        <div ng-message="uiDate">Informe uma data válida no formato DD/MM/AAAA.</div>
+    </div>
+
+    <div class="alert alert-danger" ng-messages="contatoForm.operadora.$error" ng-if="contatoForm.operadora.$dirty && contatoForm.operadora.$invalid">
+        <div ng-message="required">Por favor, selecione uma operadora!</div>
+    </div>
+
+    <button class="btn btn-primary form-control" ng-click="contato && contato.id ? atualizarContato(contato) : criarContato(contato)" ng-disabled="contatoForm.$invalid">
+        {{contato && contato.id ? 'Atualizar contato' : 'Adicionar a lista!'}}
+    </button>
+    <button class="btn btn-danger form-control" ng-click="apagarContatos(contatos)" ng-show="isContatoSelecionado(contatos)">Apagar contatos!</button>
+</div>

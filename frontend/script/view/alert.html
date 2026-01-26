@@ -1,14 +1,6 @@
 <div class="ui-alert ui-alert--{{alert.type}}" role="alert" aria-live="assertive">
     <div class="ui-alert-header">
         <div class="ui-alert-title">{{alert.title}}</div>
-        <button
-            class="ui-alert-close"
-            type="button"
-            aria-label="Fechar alerta"
-            ng-if="alert.dismissible"
-            ng-click="alert.close()">
-            ×
-        </button>
     </div>
     <div class="ui-alert-message">{{alert.message}}</div>
 </div>

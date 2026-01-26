@@ -20,7 +20,7 @@
 }
 
 .table > tbody > tr.selecionado > td {
-    background-color: rgb(255, 210, 164) !important;
+    background-color: rgb(164, 217, 255) !important;
 }
 
 
